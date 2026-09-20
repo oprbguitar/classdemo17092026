@@ -59,9 +59,9 @@ function App() {
   return (
     <div className="app-shell">
       <header className="site-header">
-        <button className="brand" type="button" onClick={restart} aria-label="Volver al inicio de Pizarra IA">
+        <button className="brand" type="button" onClick={restart} aria-label="Volver al inicio de Nexo">
           <span className="brand__mark"><GeometricMark shape="hexagon" accent="currentColor" size="small" /></span>
-          <span className="brand__name">Pizarra <em>IA</em></span>
+          <span className="brand__name">Nexo</span>
         </button>
       </header>
 
@@ -75,10 +75,10 @@ function App() {
 
         {lesson ? <LearningCard lesson={lesson} onBack={goBack} /> : <BoardQuestion question={currentStep.question} choices={currentStep.choices} onSelect={choose} isHome={isHome} />}
 
-        <div className="board__footer">
-          {!isHome && !lesson && <button className="back-button" type="button" onClick={goBack}>← <span>Volver</span></button>}
+        {!lesson && <div className="board__footer">
+          {!isHome && <button className="back-button" type="button" onClick={goBack}>← <span>Volver</span></button>}
           <span className="board__motto">Explora. Prueba. Comprueba. Aprende.</span>
-        </div>
+        </div>}
       </main>
     </div>
   )

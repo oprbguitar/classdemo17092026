@@ -27,6 +27,17 @@ export interface ProfessionalContext {
   accent: Accent
 }
 
+export interface ContextVariant {
+  example: string
+  note: string
+}
+
+export interface LessonRecommendation {
+  title: string
+  body: string
+  toolId: string
+}
+
 export interface PhaseSection {
   title: string
   body?: string
@@ -57,9 +68,10 @@ export interface LearningCard {
   accessLevel: AccessLevel
   verification: VerificationStatus
   contexts: ProfessionalContext[]
-  contextVariants: Record<string, { example: string; note: string }>
+  contextVariants: Record<string, ContextVariant>
   further: string
   phases: PhaseContent[]
+  recommendation?: LessonRecommendation
 }
 
 export interface Choice {

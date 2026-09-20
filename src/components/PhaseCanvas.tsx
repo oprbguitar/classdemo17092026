@@ -5,9 +5,10 @@ interface PhaseCanvasProps {
   phase: PhaseContent
   lessonTitle: string
   selectedTool?: Tool
+  context?: { label: string; note: string; example: string }
 }
 
-export function PhaseCanvas({ phase, lessonTitle, selectedTool }: PhaseCanvasProps) {
+export function PhaseCanvas({ phase, lessonTitle, selectedTool, context }: PhaseCanvasProps) {
   return (
     <section className="phase-canvas" aria-labelledby="phase-title">
       <div className="phase-canvas__intro">
@@ -15,7 +16,19 @@ export function PhaseCanvas({ phase, lessonTitle, selectedTool }: PhaseCanvasPro
         <h2 id="phase-title">{phase.id === 'hacer' ? 'Hacer' : phase.id === 'mejorar' ? 'Hacerlo mejor' : 'Crear un sistema'}</h2>
         <p className="phase-canvas__summary">{phase.summary}</p>
         {selectedTool && <p className="phase-canvas__provider">Puedes probarlo con <strong>{selectedTool.name}</strong>.</p>}
+        {context && <div className="phase-context"><span>Aplicado a {context.label}</span><p>{context.note || context.example}</p></div>}
       </div>
+
+      <section className="phase-instruction" aria-labelledby="phase-instruction-title">
+        <div className="phase-instruction__heading">
+          <div>
+            <p className="section-kicker">Práctica guiada</p>
+            <h3 id="phase-instruction-title">Prueba esta instrucción</h3>
+          </div>
+          <CopyButton value={phase.instruction} />
+        </div>
+        <p className="phase-instruction__text">{phase.instruction}</p>
+      </section>
 
       <div className="phase-canvas__sections">
         {phase.sections.map((section, index) => (
@@ -29,17 +42,6 @@ export function PhaseCanvas({ phase, lessonTitle, selectedTool }: PhaseCanvasPro
           </section>
         ))}
       </div>
-
-      <section className="phase-instruction" aria-labelledby="phase-instruction-title">
-        <div className="phase-instruction__heading">
-          <div>
-            <p className="section-kicker">Práctica guiada</p>
-            <h3 id="phase-instruction-title">Prueba esta instrucción</h3>
-          </div>
-          <CopyButton value={phase.instruction} />
-        </div>
-        <p className="phase-instruction__text">{phase.instruction}</p>
-      </section>
 
       <section className="phase-checklist" aria-labelledby="phase-checklist-title">
         <div>

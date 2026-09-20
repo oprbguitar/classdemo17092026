@@ -15,10 +15,27 @@ export function LearningCard({ lesson, onBack }: LearningCardProps) {
   const [contextId, setContextId] = useState('general')
   const [phaseId, setPhaseId] = useState<PhaseId>(lesson.phases[0]?.id ?? 'hacer')
   const [toolId, setToolId] = useState(lesson.tools[0]?.id ?? '')
-  const selectedContext = useMemo(() => lesson.contextVariants[contextId] ?? lesson.contextVariants.general, [contextId, lesson.contextVariants])
   const context = lesson.contexts.find((candidate) => candidate.id === contextId)
+  const selectedContext = useMemo(() => {
+    const variant = lesson.contextVariants[contextId] ?? lesson.contextVariants.general
+    if (!context) return variant
+    return {
+      example: variant.example || `Una aplicación práctica de esta lección para ${context.label.toLowerCase()}.`,
+      note: variant.note || `Adapta el lenguaje, los criterios y la revisión final a las necesidades de ${context.label.toLowerCase()}.`,
+    }
+  }, [context, contextId, lesson.contextVariants])
   const phase = lesson.phases.find((candidate) => candidate.id === phaseId) ?? lesson.phases[0]
   const selectedTool = lesson.tools.find((tool) => tool.id === toolId) ?? lesson.tools[0]
+  const activeContext = useMemo(() => context && selectedContext ? { label: context.label, note: selectedContext.note, example: selectedContext.example } : undefined, [context, selectedContext])
+  const contextName = activeContext?.label.toLowerCase()
+  const contextualPhase = !phase || !activeContext ? phase : {
+    ...phase,
+    summary: `${phase.summary} En ${contextName}, prioriza un resultado que puedas revisar y reutilizar.`,
+    sections: phase.sections.map((section, index) => index === 0
+      ? { ...section, body: `${section.body ?? ''} En este caso, piensa en las necesidades concretas de ${contextName}.` }
+      : section),
+    instruction: `${phase.instruction}\n\nContexto de trabajo: ${activeContext.label}. ${activeContext.note || activeContext.example}\nAdapta los ejemplos, el formato y los criterios de revisión a este contexto.`,
+  }
 
   if (!phase) return null
 
@@ -37,7 +54,7 @@ export function LearningCard({ lesson, onBack }: LearningCardProps) {
         <PhaseRail phases={lesson.phases} activeId={phase.id} onSelect={setPhaseId} onBack={onBack} />
 
         <main className="lesson__canvas">
-          <PhaseCanvas phase={phase} lessonTitle={lesson.title} selectedTool={selectedTool} />
+          <PhaseCanvas phase={contextualPhase} lessonTitle={lesson.title} selectedTool={selectedTool} context={activeContext} />
         </main>
 
         <aside className="lesson__aside">
@@ -45,6 +62,11 @@ export function LearningCard({ lesson, onBack }: LearningCardProps) {
             <p className="section-kicker">Proveedores</p>
             <h2 id="providers-title">Pruébalo con</h2>
             <p className="aside-section__intro">Elige un proveedor para ver qué aporta a esta tarea y abrirlo en otra pestaña.</p>
+            {lesson.recommendation && <div className="quick-recommendation">
+              <span className="quick-recommendation__label">{lesson.recommendation.title}</span>
+              <p>{lesson.recommendation.body}</p>
+              <button type="button" onClick={() => setToolId(lesson.recommendation?.toolId ?? '')}>Seleccionar {lesson.tools.find((tool) => tool.id === lesson.recommendation?.toolId)?.name ?? 'proveedor'}</button>
+            </div>}
             <div className="tool-list">
               {lesson.tools.map((tool) => <ToolBadge key={tool.id} tool={tool} selected={tool.id === selectedTool?.id} onSelect={() => setToolId(tool.id)} />)}
             </div>

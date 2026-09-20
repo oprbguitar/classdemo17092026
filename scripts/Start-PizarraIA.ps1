@@ -13,13 +13,13 @@ if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
 }
 
 if (-not (Test-Path -LiteralPath (Join-Path $projectRoot 'node_modules'))) {
-  Write-Host 'Instalando dependencias de Pizarra IA...'
+  Write-Host 'Instalando dependencias de Nexo...'
   npm install
 }
 
 $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
 if (-not $listener) {
-  Write-Host 'Iniciando Pizarra IA...'
+  Write-Host 'Iniciando Nexo...'
   $child = Start-Process -FilePath 'cmd.exe' -ArgumentList @('/d', '/c', 'npm run dev -- --host 127.0.0.1 > pizarra-ia-dev.log 2>&1') -WorkingDirectory $projectRoot -WindowStyle Hidden -PassThru
   Set-Content -LiteralPath $pidPath -Value $child.Id -Encoding ascii
 }
@@ -38,8 +38,8 @@ foreach ($attempt in 1..30) {
 }
 
 if (-not $ready) {
-  throw "Pizarra IA no respondio en $url. Revisa pizarra-ia-dev.log."
+  throw "Nexo no respondio en $url. Revisa pizarra-ia-dev.log."
 }
 
 Start-Process $url
-Write-Host "Pizarra IA esta lista: $url"
+Write-Host "Nexo esta listo: $url"

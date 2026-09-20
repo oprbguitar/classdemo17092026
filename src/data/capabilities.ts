@@ -7,6 +7,40 @@ const contextVariants = (overrides: Record<string, { example: string; note: stri
   ...overrides,
 })
 
+const practiceInstruction = (instruction: string) => `${instruction}
+
+Organiza la respuesta en este orden:
+1. Objetivo y alcance de la tarea.
+2. Resultado principal, con títulos y pasos fáciles de revisar.
+3. Supuestos o información que falta.
+4. Comprobaciones que debería hacer una persona antes de usar el resultado.
+
+No inventes datos. Si una parte no se puede determinar con la información disponible, dilo explícitamente.`
+
+const improvementInstruction = (instruction: string) => `${instruction}
+
+Ahora mejora el resultado con criterios definidos:
+- Adapta el lenguaje a la audiencia indicada.
+- Separa hechos, interpretación y recomendaciones.
+- Conserva nombres, cifras, fechas, citas y compromisos del material original.
+- Señala dudas, riesgos de interpretación y decisiones que requieren revisión humana.
+
+Devuelve primero la versión mejorada y después una breve lista de cambios y comprobaciones pendientes.`
+
+const systemInstruction = (title: string) => `Diseña un sistema reutilizable para: ${title}.
+
+Especifica con detalle:
+1. Objetivo, alcance y resultado esperado.
+2. Entradas permitidas, formato y datos que nunca deben compartirse.
+3. Instrucción principal y pasos de transformación.
+4. Criterios de calidad para aceptar, rechazar o devolver un resultado.
+5. Casos excepcionales y una bandeja de pendientes que no pueda resolver la IA.
+6. Revisión humana obligatoria, responsable y momento de aprobación.
+7. Salida final, nombre de los archivos o campos, y dónde guardar la evidencia.
+8. Prueba piloto con tres casos conocidos, indicadores de error y plan de mejora.
+
+No conectes herramientas ni automatices una decisión hasta validar el flujo con una persona responsable.`
+
 type LessonDraft = Omit<LearningCard, 'contexts' | 'verification' | 'accessLevel' | 'phases'> & Partial<Pick<LearningCard, 'contexts' | 'verification' | 'accessLevel'>>
 
 function buildPhases(card: Omit<LearningCard, 'phases'>): PhaseContent[] {
@@ -21,7 +55,7 @@ function buildPhases(card: Omit<LearningCard, 'phases'>): PhaseContent[] {
         { title: 'Un caso concreto', body: card.example },
         { title: 'Ruta de trabajo', bullets: card.steps.slice(0, 3) },
       ],
-      instruction: card.instruction,
+      instruction: practiceInstruction(card.instruction),
       checklist: ['El resultado responde a la pregunta original.', 'Puedes localizar la información de origen.', 'Anotaste qué parte todavía necesita revisión.'],
     },
     {
@@ -34,7 +68,7 @@ function buildPhases(card: Omit<LearningCard, 'phases'>): PhaseContent[] {
         { title: 'Señales de calidad', body: card.caution, bullets: ['Las afirmaciones importantes tienen una fuente o una explicación.', 'El resultado declara lo que no puede determinar.', 'La versión mejorada mantiene el sentido y los datos originales.'] },
         { title: 'Compara dos versiones', body: 'Revisa el primer resultado y la versión con criterios concretos. Conserva los cambios que mejoran la decisión y descarta los que solo hacen que el texto suene más seguro.' },
       ],
-      instruction: `${card.instruction} Repite la respuesta siguiendo criterios específicos: separa hechos, interpretación y dudas; conserva las referencias; y termina con una lista de puntos que una persona debe comprobar.`,
+      instruction: improvementInstruction(card.instruction),
       checklist: ['Definiste el formato y la audiencia.', 'Comparaste el resultado con el material original.', 'Marcaste las decisiones que todavía requieren criterio humano.'],
     },
     {
@@ -47,7 +81,7 @@ function buildPhases(card: Omit<LearningCard, 'phases'>): PhaseContent[] {
         { title: 'Diseña un flujo verificable', bullets: ['Entrada: qué información llega y en qué formato.', 'Transformación: qué pasos puede apoyar la IA.', 'Revisión humana: qué debe comprobar una persona.', 'Salida: qué se guarda, comparte o deriva.'] },
         { title: 'Responsabilidad y límites', body: card.responsible },
       ],
-      instruction: `Diseña un flujo reutilizable para “${card.title}”. Define entrada, criterios de calidad, revisión humana, salida, excepciones y cómo guardar ejemplos para mejorar el sistema.`,
+      instruction: systemInstruction(card.title),
       checklist: ['Probaste el flujo con casos conocidos.', 'Registraste errores y excepciones.', 'Definiste quién revisa antes de usar el resultado.'],
     },
   ]
@@ -91,12 +125,16 @@ const mejorarTexto = lesson({
   steps: ['Pega el texto y explica quién lo leerá.', 'Indica qué debe conservarse.', 'Pide una versión mejorada y una breve lista de cambios.', 'Revisa que la versión final mantenga tu intención.'],
   instruction: 'Mejora la claridad de este texto para [audiencia]. Conserva todos los datos, fechas y compromisos. No inventes información. Devuélveme primero la versión revisada y luego tres cambios importantes que hayas hecho.',
   tools: getTools('chatgpt', 'claude', 'copilot'),
+  recommendation: { title: 'Sugerencia para oficina', body: 'Si trabajas en Word o Excel, prueba Microsoft Copilot: está integrado en Microsoft 365 y puede ayudarte a reescribir, ampliar o mejorar textos dentro del flujo de trabajo.', toolId: 'copilot' },
   caution: 'Una redacción más fluida puede ocultar un cambio de sentido. Compara la versión revisada con tu borrador antes de enviarla.',
   responsible: 'Retira nombres, teléfonos y datos internos si no tienes autorización para compartirlos.',
   further: 'Puedes crear una guía de estilo reutilizable para que todos tus documentos mantengan el mismo tono y estructura.',
   contextVariants: contextVariants({
     educacion: { example: 'Tengo una explicación sobre evaluación formativa y quiero adaptarla para familias sin perder precisión.', note: 'Pide ejemplos sencillos, pero conserva los conceptos que deben aprenderse.' },
     negocios: { example: 'Tengo una propuesta comercial y quiero que sea más concreta para una persona que debe decidir.', note: 'Pide que distinga beneficios, condiciones y próximos pasos.' },
+    administracion: { example: 'Tengo un correo o informe interno y quiero que sea claro para el equipo que debe ejecutarlo.', note: 'Conserva responsables, plazos y acciones; separa instrucciones de contexto.' },
+    derecho: { example: 'Tengo un borrador administrativo y quiero mejorar su claridad sin alterar su alcance ni sus fundamentos.', note: 'Conserva citas, fechas y términos; pide que marque cualquier cambio que pueda modificar el sentido.' },
+    ingenieria: { example: 'Tengo una nota técnica y quiero que sea más clara para una revisión de proyecto.', note: 'Conserva unidades, supuestos y condiciones; pide que no simplifique una limitación técnica importante.' },
   }),
 })
 

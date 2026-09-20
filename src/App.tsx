@@ -63,14 +63,13 @@ function App() {
           <span className="brand__mark"><GeometricMark shape="hexagon" accent="currentColor" size="small" /></span>
           <span className="brand__name">Pizarra <em>IA</em></span>
         </button>
-        <p className="site-header__principle">No enseñamos herramientas.<br /><span>Enseñamos posibilidades.</span></p>
       </header>
 
       <main className="board" aria-live="polite">
-        <div className="board__topline">
+        {!isHome && <div className="board__topline">
           <span>Ideas · preguntas · aprendizaje real</span>
-          {!isHome && <button className="restart-button" type="button" onClick={restart}>Empezar de nuevo</button>}
-        </div>
+          <button className="restart-button" type="button" onClick={restart}>Empezar de nuevo</button>
+        </div>}
 
         {path.length > 0 && <ContextTrail path={path} onSelect={goToPath} />}
 

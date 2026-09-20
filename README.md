@@ -14,12 +14,14 @@ El portal no se organiza por marcas ni por profesiones. El contenido parte de se
 - Flujo completo `Entender → Un documento → Hacer preguntas`.
 - Lecciones de ejemplo para mejorar un texto, investigar con fuentes, analizar una tabla, crear una presentación y automatizar una tarea repetitiva.
 - Instrucciones copiables, avisos de uso responsable, estado de verificación y selector de contexto profesional.
+- Canvas de aprendizaje en tres fases: `Hacer`, `Hacerlo mejor` y `Crear un sistema`, con contenido, criterios de salida y prompts propios.
+- Botones de proveedores con logos SVG propios, descripción contextual y enlace externo para ChatGPT, Claude, Gemini, Microsoft Copilot y Perplexity.
 - Arquitectura extensible para herramientas, contextos, niveles de acceso y «Ideas que funcionan».
 - Interfaz responsive para móvil, tablet y escritorio sin backend ni autenticación.
 
 ## Tecnologías
 
-React, TypeScript, Vite, CSS moderno, Vitest, Testing Library y Playwright. No se usa un framework visual ni un backend en esta primera versión.
+React, TypeScript, Vite, CSS moderno, Vitest, Testing Library y Playwright. La dirección visual usa Archivo, Public Sans y JetBrains Mono. No se usa un framework visual ni un backend en esta primera versión.
 
 ## Ejecutar localmente
 
@@ -82,5 +84,5 @@ La publicación no se ejecuta desde este checkout local automáticamente. Para h
 ## Limitaciones conocidas
 
 - El contenido es estático y las herramientas se presentan como referencias; no hay integración con modelos ni carga real de documentos.
-- El navegador debe poder cargar IBM Plex Sans desde Google Fonts; existe fallback local para contextos sin red.
+- El navegador puede cargar Archivo, Public Sans y JetBrains Mono desde Google Fonts; existen fallbacks locales para contextos sin red.
 - La fecha de verificación representa el estado editorial del MVP, no una garantía de disponibilidad o precio de cada servicio.

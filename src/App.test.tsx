@@ -42,4 +42,31 @@ describe('flujo principal de Pizarra IA', () => {
     await user.click(screen.getByRole('button', { name: /Copiar instrucción/i }))
     expect(screen.getByText('Instrucción copiada')).toBeInTheDocument()
   })
+
+  it('permite avanzar por fases sin perder el contexto de la lección', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'ENTENDER' }))
+    await user.click(screen.getByRole('button', { name: 'Un documento' }))
+    await user.click(screen.getByRole('button', { name: 'Hacer preguntas' }))
+
+    expect(screen.getByRole('button', { name: 'HACER' })).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByRole('button', { name: 'HACERLO MEJOR' }))
+
+    expect(screen.getByRole('heading', { name: 'Hacerlo mejor' })).toBeInTheDocument()
+    expect(screen.getByText(/criterios específicos/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '← Volver' })).toBeInTheDocument()
+  })
+
+  it('muestra la información del proveedor seleccionado en el lateral', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'ENTENDER' }))
+    await user.click(screen.getByRole('button', { name: 'Un documento' }))
+    await user.click(screen.getByRole('button', { name: 'Hacer preguntas' }))
+    await user.click(screen.getByRole('button', { name: 'Claude' }))
+
+    expect(screen.getByText('Asistente orientado a lectura, escritura y razonamiento sobre textos.')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Abrir Claude/i })).toHaveAttribute('href', 'https://claude.ai')
+  })
 })

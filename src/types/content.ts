@@ -2,6 +2,7 @@ export type Geometry = 'circle' | 'triangle' | 'search' | 'grid' | 'spark' | 'he
 export type Accent = 'coral' | 'mustard' | 'teal' | 'green' | 'ink'
 export type AccessLevel = 'open' | 'advanced'
 export type VerificationState = 'Probado' | 'Actualizado' | 'En revisión' | 'Función modificada' | 'Experimental'
+export type PhaseId = 'hacer' | 'mejorar' | 'sistema'
 
 export interface VerificationStatus {
   state: VerificationState
@@ -26,6 +27,22 @@ export interface ProfessionalContext {
   accent: Accent
 }
 
+export interface PhaseSection {
+  title: string
+  body?: string
+  bullets?: string[]
+}
+
+export interface PhaseContent {
+  id: PhaseId
+  number: string
+  label: string
+  summary: string
+  sections: PhaseSection[]
+  instruction: string
+  checklist: string[]
+}
+
 export interface LearningCard {
   id: string
   title: string
@@ -42,6 +59,7 @@ export interface LearningCard {
   contexts: ProfessionalContext[]
   contextVariants: Record<string, { example: string; note: string }>
   further: string
+  phases: PhaseContent[]
 }
 
 export interface Choice {

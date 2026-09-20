@@ -73,10 +73,10 @@ function App() {
 
         {path.length > 0 && <ContextTrail path={path} onSelect={goToPath} />}
 
-        {lesson ? <LearningCard lesson={lesson} /> : <BoardQuestion question={currentStep.question} choices={currentStep.choices} onSelect={choose} isHome={isHome} />}
+        {lesson ? <LearningCard lesson={lesson} onBack={goBack} /> : <BoardQuestion question={currentStep.question} choices={currentStep.choices} onSelect={choose} isHome={isHome} />}
 
         <div className="board__footer">
-          {!isHome && <button className="back-button" type="button" onClick={goBack}>← <span>Volver</span></button>}
+          {!isHome && !lesson && <button className="back-button" type="button" onClick={goBack}>← <span>Volver</span></button>}
           <span className="board__motto">Explora. Prueba. Comprueba. Aprende.</span>
         </div>
       </main>

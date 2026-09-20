@@ -1,79 +1,66 @@
 import { useMemo, useState } from 'react'
-import type { LearningCard as LearningCardData } from '../types/content'
-import { CopyButton } from './CopyButton'
+import { PhaseCanvas } from './PhaseCanvas'
+import { PhaseRail } from './PhaseRail'
 import { ResponsibleNotice } from './ResponsibleNotice'
 import { ToolBadge } from './ToolBadge'
 import { VerificationBadge } from './VerificationBadge'
+import type { LearningCard as LearningCardData, PhaseId } from '../types/content'
 
 interface LearningCardProps {
   lesson: LearningCardData
+  onBack: () => void
 }
 
-export function LearningCard({ lesson }: LearningCardProps) {
+export function LearningCard({ lesson, onBack }: LearningCardProps) {
   const [contextId, setContextId] = useState('general')
+  const [phaseId, setPhaseId] = useState<PhaseId>(lesson.phases[0]?.id ?? 'hacer')
+  const [toolId, setToolId] = useState(lesson.tools[0]?.id ?? '')
   const selectedContext = useMemo(() => lesson.contextVariants[contextId] ?? lesson.contextVariants.general, [contextId, lesson.contextVariants])
   const context = lesson.contexts.find((candidate) => candidate.id === contextId)
+  const phase = lesson.phases.find((candidate) => candidate.id === phaseId) ?? lesson.phases[0]
+  const selectedTool = lesson.tools.find((tool) => tool.id === toolId) ?? lesson.tools[0]
+
+  if (!phase) return null
 
   return (
     <article className="lesson" aria-labelledby="lesson-title">
       <header className="lesson__header">
         <div>
-          <span className="eyebrow">Lección práctica</span>
+          <span className="eyebrow">Lección práctica · canvas de fases</span>
           <h1 id="lesson-title">{lesson.title}</h1>
           <p className="lesson__summary">{lesson.summary}</p>
         </div>
         <VerificationBadge verification={lesson.verification} />
       </header>
 
-      <div className="lesson__body">
-        <div className="lesson__main">
-          <section className="lesson-section">
-            <p className="section-kicker">01</p>
-            <div>
-              <h2>Qué puedes hacer</h2>
-              <p>{lesson.whatYouCanDo}</p>
-            </div>
-          </section>
+      <div className="lesson__workspace">
+        <PhaseRail phases={lesson.phases} activeId={phase.id} onSelect={setPhaseId} onBack={onBack} />
 
-          <section className="lesson-section lesson-section--example">
-            <p className="section-kicker">02</p>
-            <div>
-              <h2>Ejemplo</h2>
-              <p className="example-quote">“{selectedContext.example || lesson.example}”</p>
-              {context && <p className="context-note"><strong>Para {context.label.toLowerCase()}:</strong> {selectedContext.note}</p>}
-            </div>
-          </section>
-
-          <section className="lesson-section">
-            <p className="section-kicker">03</p>
-            <div>
-              <h2>Pruébalo</h2>
-              <ol className="steps-list">
-                {lesson.steps.map((step) => <li key={step}>{step}</li>)}
-              </ol>
-            </div>
-          </section>
-
-          <section className="instruction-block" aria-labelledby="instruction-title">
-            <div className="instruction-block__heading">
-              <div>
-                <p className="section-kicker">04</p>
-                <h2 id="instruction-title">Prueba esta instrucción</h2>
-              </div>
-              <CopyButton value={lesson.instruction} />
-            </div>
-            <p className="instruction-block__text">{lesson.instruction}</p>
-          </section>
-        </div>
+        <main className="lesson__canvas">
+          <PhaseCanvas phase={phase} lessonTitle={lesson.title} selectedTool={selectedTool} />
+        </main>
 
         <aside className="lesson__aside">
-          <section className="aside-section">
-            <p className="section-kicker">05</p>
-            <h2>Puedes hacerlo con</h2>
-            <p className="aside-section__intro">La capacidad es lo importante. Estas son algunas opciones que puedes explorar.</p>
+          <section className="aside-section provider-panel" aria-labelledby="providers-title">
+            <p className="section-kicker">Proveedores</p>
+            <h2 id="providers-title">Pruébalo con</h2>
+            <p className="aside-section__intro">Elige un proveedor para ver qué aporta a esta tarea y abrirlo en otra pestaña.</p>
             <div className="tool-list">
-              {lesson.tools.map((tool) => <ToolBadge key={tool.id} tool={tool} />)}
+              {lesson.tools.map((tool) => <ToolBadge key={tool.id} tool={tool} selected={tool.id === selectedTool?.id} onSelect={() => setToolId(tool.id)} />)}
             </div>
+            {selectedTool && (
+              <div className="provider-detail">
+                <div className="provider-detail__name"><span className="provider-detail__dot" aria-hidden="true" />{selectedTool.name}</div>
+                <p>{selectedTool.description}</p>
+                <div className="provider-detail__meta">
+                  <span>{selectedTool.freePlan ? 'Tiene acceso gratuito' : 'Revisa el plan disponible'}</span>
+                  <span>{selectedTool.verification.state}</span>
+                </div>
+                <p className="provider-detail__label">Funciona especialmente bien para</p>
+                <ul>{selectedTool.recommendedFor.map((item) => <li key={item}>{item}</li>)}</ul>
+                <a className="provider-detail__open" href={selectedTool.website} target="_blank" rel="noreferrer">Abrir {selectedTool.name} ↗</a>
+              </div>
+            )}
           </section>
 
           <ResponsibleNotice>{lesson.caution} {lesson.responsible}</ResponsibleNotice>
@@ -87,6 +74,7 @@ export function LearningCard({ lesson }: LearningCardProps) {
                 <button className={contextId === candidate.id ? 'is-selected' : ''} type="button" key={candidate.id} onClick={() => setContextId(candidate.id)}>{candidate.label}</button>
               ))}
             </div>
+            {context && selectedContext.example && <p className="context-picker__note"><strong>Ejemplo para {context.label.toLowerCase()}:</strong> {selectedContext.example}</p>}
           </section>
 
           <details className="further-details">

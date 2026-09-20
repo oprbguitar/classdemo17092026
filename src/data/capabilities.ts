@@ -1,19 +1,66 @@
 import { getTools } from './tools'
 import { professionalContexts } from './professions'
-import type { Capability, Choice, LearningCard } from '../types/content'
+import type { Capability, Choice, LearningCard, PhaseContent } from '../types/content'
 
 const contextVariants = (overrides: Record<string, { example: string; note: string }>) => ({
   general: { example: '', note: '' },
   ...overrides,
 })
 
-function lesson(data: Omit<LearningCard, 'contexts' | 'verification' | 'accessLevel'> & Partial<Pick<LearningCard, 'contexts' | 'verification' | 'accessLevel'>>): LearningCard {
-  return {
+type LessonDraft = Omit<LearningCard, 'contexts' | 'verification' | 'accessLevel' | 'phases'> & Partial<Pick<LearningCard, 'contexts' | 'verification' | 'accessLevel'>>
+
+function buildPhases(card: Omit<LearningCard, 'phases'>): PhaseContent[] {
+  return [
+    {
+      id: 'hacer',
+      number: '01',
+      label: 'HACER',
+      summary: 'Obtén un primer resultado útil y aprende a revisar qué hizo la herramienta.',
+      sections: [
+        { title: 'Primer resultado', body: card.whatYouCanDo },
+        { title: 'Un caso concreto', body: card.example },
+        { title: 'Ruta de trabajo', bullets: card.steps.slice(0, 3) },
+      ],
+      instruction: card.instruction,
+      checklist: ['El resultado responde a la pregunta original.', 'Puedes localizar la información de origen.', 'Anotaste qué parte todavía necesita revisión.'],
+    },
+    {
+      id: 'mejorar',
+      number: '02',
+      label: 'HACERLO MEJOR',
+      summary: 'Añade criterios claros para conseguir una respuesta más comprobable y útil.',
+      sections: [
+        { title: 'Ajusta la respuesta', body: 'Pide un formato, una audiencia y un estándar de evidencia. La herramienta trabaja mejor cuando sabe qué debe conservar, qué debe separar y cómo debe mostrar sus límites.', bullets: ['Define quién usará el resultado.', 'Exige que separe hechos, interpretación y dudas.', 'Pide una estructura que puedas comparar entre versiones.'] },
+        { title: 'Señales de calidad', body: card.caution, bullets: ['Las afirmaciones importantes tienen una fuente o una explicación.', 'El resultado declara lo que no puede determinar.', 'La versión mejorada mantiene el sentido y los datos originales.'] },
+        { title: 'Compara dos versiones', body: 'Revisa el primer resultado y la versión con criterios concretos. Conserva los cambios que mejoran la decisión y descarta los que solo hacen que el texto suene más seguro.' },
+      ],
+      instruction: `${card.instruction} Repite la respuesta siguiendo criterios específicos: separa hechos, interpretación y dudas; conserva las referencias; y termina con una lista de puntos que una persona debe comprobar.`,
+      checklist: ['Definiste el formato y la audiencia.', 'Comparaste el resultado con el material original.', 'Marcaste las decisiones que todavía requieren criterio humano.'],
+    },
+    {
+      id: 'sistema',
+      number: '03',
+      label: 'CREAR UN SISTEMA',
+      summary: 'Convierte una prueba puntual en un proceso reutilizable, medible y con revisión humana.',
+      sections: [
+        { title: 'Del caso al proceso', body: card.further },
+        { title: 'Diseña un flujo verificable', bullets: ['Entrada: qué información llega y en qué formato.', 'Transformación: qué pasos puede apoyar la IA.', 'Revisión humana: qué debe comprobar una persona.', 'Salida: qué se guarda, comparte o deriva.'] },
+        { title: 'Responsabilidad y límites', body: card.responsible },
+      ],
+      instruction: `Diseña un flujo reutilizable para “${card.title}”. Define entrada, criterios de calidad, revisión humana, salida, excepciones y cómo guardar ejemplos para mejorar el sistema.`,
+      checklist: ['Probaste el flujo con casos conocidos.', 'Registraste errores y excepciones.', 'Definiste quién revisa antes de usar el resultado.'],
+    },
+  ]
+}
+
+function lesson(data: LessonDraft): LearningCard {
+  const base: Omit<LearningCard, 'phases'> = {
     contexts: professionalContexts,
     verification: { state: 'Probado', updatedAt: 'septiembre de 2026' },
     accessLevel: 'open',
     ...data,
   }
+  return { ...base, phases: buildPhases(base) }
 }
 
 const entenderDocumento = lesson({

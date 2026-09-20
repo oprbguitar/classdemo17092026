@@ -1,0 +1,40 @@
+{
+  "name": "pizarra-ia",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --report-unused-disable-directives",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "preview": "vite preview",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "@eslint/js": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@testing-library/user-event": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/node": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "typescript-eslint": "latest",
+    "@vitest/coverage-v8": "latest",
+    "eslint": "latest",
+    "eslint-plugin-react-hooks": "latest",
+    "jsdom": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}

@@ -4,6 +4,7 @@ import { PhaseRail } from './PhaseRail'
 import { ResponsibleNotice } from './ResponsibleNotice'
 import { ToolBadge } from './ToolBadge'
 import { VerificationBadge } from './VerificationBadge'
+import { LearningResources } from './LearningResources'
 import type { LearningCard as LearningCardData, PhaseId } from '../types/content'
 
 interface LearningCardProps {
@@ -78,6 +79,20 @@ export function LearningCard({ lesson, onBack }: LearningCardProps) {
                   <span>{selectedTool.freePlan ? 'Tiene acceso gratuito' : 'Revisa el plan disponible'}</span>
                   <span>{selectedTool.verification.state}</span>
                 </div>
+                <div className="provider-detail__pricing">
+                  <div>
+                    <span className="provider-detail__label">Planes y precio orientativo</span>
+                    <strong>{selectedTool.pricing.summary}</strong>
+                  </div>
+                  <a href={selectedTool.pricing.url} target="_blank" rel="noreferrer">Ver precios ↗</a>
+                </div>
+                <div className="model-advice">
+                  <p className="provider-detail__label">Elección rápida de modelo</p>
+                  <div><span>Más económico</span><strong>{selectedTool.modelAdvice.economy}</strong></div>
+                  <div><span>Más rápido</span><strong>{selectedTool.modelAdvice.fast}</strong></div>
+                  <div><span>Más capaz</span><strong>{selectedTool.modelAdvice.quality}</strong></div>
+                  <p>{selectedTool.modelAdvice.note}</p>
+                </div>
                 <p className="provider-detail__label">Funciona especialmente bien para</p>
                 <ul>{selectedTool.recommendedFor.map((item) => <li key={item}>{item}</li>)}</ul>
                 <a className="provider-detail__open" href={selectedTool.website} target="_blank" rel="noreferrer">Abrir {selectedTool.name} ↗</a>
@@ -98,6 +113,8 @@ export function LearningCard({ lesson, onBack }: LearningCardProps) {
             </div>
             {context && selectedContext.example && <p className="context-picker__note"><strong>Ejemplo para {context.label.toLowerCase()}:</strong> {selectedContext.example}</p>}
           </section>
+
+          <LearningResources />
 
           <details className="further-details">
             <summary>Quiero ir más lejos</summary>

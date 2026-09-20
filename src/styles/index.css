@@ -291,6 +291,16 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
 .provider-detail ul { margin-top: var(--sp-2); padding-left: var(--sp-4); font-size: var(--fs-caption); }
 .provider-detail__open { display: inline-flex; margin-top: var(--sp-4); color: var(--ink); font-size: var(--fs-label); font-weight: 600; text-underline-offset: 4px; }
 .provider-detail__open:hover { color: var(--accent); }
+.provider-detail__pricing { display: grid; gap: var(--sp-2); margin-top: var(--sp-4); padding: var(--sp-3); border-left: 3px solid var(--support); background: #eef5f4; }
+.provider-detail__pricing .provider-detail__label { display: block; margin: 0; }
+.provider-detail__pricing strong { display: block; margin-top: var(--sp-1); color: var(--ink); font-size: var(--fs-caption); line-height: 1.4; }
+.provider-detail__pricing a { color: var(--support); font-size: var(--fs-caption); font-weight: 600; text-underline-offset: 3px; }
+.model-advice { display: grid; gap: var(--sp-2); margin-top: var(--sp-4); padding-top: var(--sp-3); border-top: var(--border) solid var(--line); }
+.model-advice .provider-detail__label { margin: 0 0 var(--sp-1); }
+.model-advice > div { display: grid; grid-template-columns: minmax(82px, .7fr) minmax(0, 1.3fr); gap: var(--sp-2); font-size: var(--fs-caption); line-height: 1.35; }
+.model-advice > div span { color: var(--ink-faint); }
+.model-advice > div strong { color: var(--ink); font-weight: 600; }
+.model-advice > p:last-child { margin: var(--sp-1) 0 0; color: var(--ink-soft); font-size: var(--fs-caption); line-height: 1.4; }
 .lesson__workspace .responsible-notice { font-size: var(--fs-caption); }
 .context-picker__note { margin: var(--sp-4) 0 0; color: var(--ink-soft); font-size: var(--fs-caption); line-height: 1.45; }
 .phase-context { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-3); align-items: baseline; margin-top: var(--sp-4); padding: var(--sp-3); border-left: 3px solid var(--accent); background: var(--surface-warm); }
@@ -302,8 +312,22 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
 .quick-recommendation button { min-height: 36px; padding: var(--sp-2) var(--sp-3); border: var(--border) solid var(--support); background: transparent; color: var(--support); cursor: pointer; font-size: var(--fs-caption); }
 .quick-recommendation button:hover { background: var(--support); color: var(--surface-2); }
 
+.learning-resources { padding-top: var(--sp-4); border-top: var(--border) solid var(--line); }
+.learning-resources__header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-3); }
+.learning-resources h2 { margin: 0; font-size: var(--fs-h4); font-weight: 600; }
+.learning-resources__count { color: var(--ink-faint); font-family: var(--font-mono); font-size: .625rem; text-transform: uppercase; }
+.learning-resources__intro { margin: var(--sp-3) 0; color: var(--ink-soft); font-size: var(--fs-caption); line-height: 1.45; }
+.learning-resources__list { display: grid; gap: var(--sp-2); }
+.learning-resource { display: grid; gap: var(--sp-1); padding: var(--sp-3); border: var(--border) solid var(--line); background: var(--surface-2); color: inherit; text-decoration: none; transition: border-color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease); }
+.learning-resource:hover, .learning-resource:focus-visible { border-color: var(--ink); background: var(--surface-warm); }
+.learning-resource__meta { color: var(--support); font-family: var(--font-mono); font-size: .6rem; text-transform: uppercase; }
+.learning-resource strong { font-size: var(--fs-caption); line-height: 1.35; }
+.learning-resource > span:not(.learning-resource__meta):not(.learning-resource__open) { color: var(--ink-soft); font-size: .6875rem; line-height: 1.35; }
+.learning-resource__open { margin-top: var(--sp-1); color: var(--ink); font-size: .625rem; font-weight: 600; }
+.learning-resources__note { margin: var(--sp-3) 0 0; color: var(--ink-faint); font-size: .625rem; line-height: 1.4; }
+
 @media (max-width: 1180px) {
-  .lesson__workspace { grid-template-columns: 190px minmax(0, 1fr) 260px; }
+  .lesson__workspace { grid-template-columns: 190px minmax(0, 1fr) 280px; }
   .lesson__canvas { padding-inline: var(--sp-5); }
   .lesson__workspace .lesson__aside { padding-left: var(--sp-4); }
 }
@@ -350,7 +374,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
 .context-trail { margin-top: var(--sp-3); }
 .lesson { padding: var(--sp-4) 0 0; }
 .lesson__header { padding-bottom: var(--sp-4); }
-.lesson__workspace { grid-template-columns: 190px minmax(0, 1fr) 268px; margin-top: var(--sp-4); }
+.lesson__workspace { grid-template-columns: 210px minmax(0, 1fr) 320px; margin-top: var(--sp-4); }
 .phase-rail { padding-top: var(--sp-4); padding-bottom: var(--sp-4); }
 .phase-rail__back { margin-bottom: var(--sp-4); }
 .phase-rail__hint { margin-top: var(--sp-4); padding-top: var(--sp-3); }

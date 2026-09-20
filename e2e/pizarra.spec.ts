@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Nexo', () => {
+test.describe('Nemo IA', () => {
   test('muestra seis intenciones y no desborda el viewport', async ({ page }) => {
     await page.goto('/')
-    await expect(page).toHaveTitle('Nexo — Aprende IA haciendo')
+    await expect(page).toHaveTitle('Nemo IA — Aprende IA haciendo')
     await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', /favicon\.svg/)
     await expect(page.getByRole('heading', { name: '¿Qué quieres hacer hoy?' })).toBeVisible()
     await expect(page.getByRole('list', { name: 'Opciones para continuar' }).getByRole('button')).toHaveCount(6)

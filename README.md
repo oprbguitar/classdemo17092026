@@ -1,6 +1,6 @@
-# Nexo
+# Nemo IA
 
-MVP funcional de un portal de aprendizaje práctico de inteligencia artificial. Nexo empieza con una necesidad —«¿Qué quieres hacer hoy?»— y revela solo la siguiente decisión necesaria hasta llegar a una instrucción que la persona puede probar.
+MVP funcional de un portal de aprendizaje práctico de inteligencia artificial. Nemo IA empieza con una necesidad —«¿Qué quieres hacer hoy?»— y revela solo la siguiente decisión necesaria hasta llegar a una instrucción que la persona puede probar.
 
 ## Principio de producto
 
@@ -15,13 +15,17 @@ El portal no se organiza por marcas ni por profesiones. El contenido parte de se
 - Lecciones de ejemplo para mejorar un texto, investigar con fuentes, analizar una tabla, crear una presentación y automatizar una tarea repetitiva.
 - Instrucciones copiables, avisos de uso responsable, estado de verificación y selector de contexto profesional.
 - Canvas de aprendizaje en tres fases: `Hacer`, `Hacerlo mejor` y `Crear un sistema`, con contenido, criterios de salida y prompts propios.
-- Botones de proveedores con logotipos SVG locales de marca, descripción contextual y enlace externo para ChatGPT, Claude, Gemini, Microsoft Copilot y Perplexity.
+- Botones de proveedores con logotipos SVG locales de marca, descripción contextual y enlace externo para ChatGPT, Claude, Gemini, Microsoft Copilot y Perplexity; además de Jenni AI, NotebookLM, Codex, Claude Code y herramientas de automatización.
+- Sugerencias de modelo económico, rápido y capaz, precios orientativos con fecha de consulta y enlaces oficiales de cada plan.
+- Directorio compacto de cursos, badges, certificados de finalización y diplomados oficiales de alcance internacional y Perú.
 - Arquitectura extensible para herramientas, contextos, niveles de acceso y «Ideas que funcionan».
 - Interfaz responsive para móvil, tablet y escritorio sin backend ni autenticación.
 
 ## Tecnologías
 
 React, TypeScript, Vite, CSS moderno, Vitest, Testing Library y Playwright. La dirección visual usa IBM Plex Serif, IBM Plex Sans e IBM Plex Mono. No se usa un framework visual ni un backend en esta primera versión.
+
+Los precios y la oferta de cursos son referencias consultadas el 20 de septiembre de 2026; cada enlace abre la fuente oficial para revisar cambios por país, moneda, licencia o fecha.
 
 ## Ejecutar localmente
 

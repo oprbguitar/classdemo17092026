@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import App from './App'
 
-describe('flujo principal de Nexo', () => {
+describe('flujo principal de Nemo IA', () => {
   it('permite llegar desde Entender hasta la lección de preguntas', async () => {
     const user = userEvent.setup()
     render(<App />)
@@ -84,5 +84,31 @@ describe('flujo principal de Nexo', () => {
 
     await user.click(screen.getByRole('button', { name: 'CREAR UN SISTEMA' }))
     expect(screen.getByText(/Entradas permitidas, formato y datos que nunca deben compartirse/i)).toBeInTheDocument()
+  })
+
+  it('ofrece Jenni AI para escritura y muestra precio y modelo sugerido', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'ESCRIBIR' }))
+    await user.click(screen.getByRole('button', { name: /Mejorar un texto/i }))
+
+    expect(screen.getByRole('button', { name: 'Jenni AI' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Jenni AI' }))
+    expect(screen.getByText(/Plus US\$12\/mes/i)).toBeInTheDocument()
+    expect(screen.getByText(/Elección rápida de modelo/i)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Abrir Jenni AI/i })).toHaveAttribute('href', 'https://jenni.ai')
+  })
+
+  it('detalla Codex y Claude Code al construir una herramienta interna', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'CONSTRUIR' }))
+    await user.click(screen.getByRole('button', { name: /Construir una herramienta interna/i }))
+
+    expect(screen.getByRole('button', { name: 'OpenAI Codex' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Claude Code' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'CREAR UN SISTEMA' }))
+    expect(screen.getByText(/usa Codex o Claude Code como agente de implementación/i)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /OpenAI Academy/i })).toBeInTheDocument()
   })
 })

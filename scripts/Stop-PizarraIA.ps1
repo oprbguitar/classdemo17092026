@@ -4,7 +4,7 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $pidPath = Join-Path $projectRoot '.pizarra-ia-dev.pid'
 
 if (-not (Test-Path -LiteralPath $pidPath)) {
-  Write-Host 'No hay un proceso de Nexo registrado.'
+  Write-Host 'No hay un proceso de Nemo IA registrado.'
   exit 0
 }
 
@@ -15,4 +15,4 @@ if ($processId -match '^\d+$') {
 }
 
 Remove-Item -LiteralPath $pidPath -Force -ErrorAction SilentlyContinue
-Write-Host 'Proceso de Nexo detenido.'
+Write-Host 'Proceso de Nemo IA detenido.'

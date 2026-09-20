@@ -13,13 +13,13 @@ if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
 }
 
 if (-not (Test-Path -LiteralPath (Join-Path $projectRoot 'node_modules'))) {
-  Write-Host 'Instalando dependencias de Nexo...'
+  Write-Host 'Instalando dependencias de Nemo IA...'
   npm install
 }
 
 $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
 if (-not $listener) {
-  Write-Host 'Iniciando Nexo...'
+  Write-Host 'Iniciando Nemo IA...'
   $child = Start-Process -FilePath 'cmd.exe' -ArgumentList @('/d', '/c', 'npm run dev -- --host 127.0.0.1 > pizarra-ia-dev.log 2>&1') -WorkingDirectory $projectRoot -WindowStyle Hidden -PassThru
   Set-Content -LiteralPath $pidPath -Value $child.Id -Encoding ascii
 }
@@ -38,8 +38,8 @@ foreach ($attempt in 1..30) {
 }
 
 if (-not $ready) {
-  throw "Nexo no respondio en $url. Revisa pizarra-ia-dev.log."
+  throw "Nemo IA no respondio en $url. Revisa pizarra-ia-dev.log."
 }
 
 Start-Process $url
-Write-Host "Nexo esta listo: $url"
+Write-Host "Nemo IA esta listo: $url"

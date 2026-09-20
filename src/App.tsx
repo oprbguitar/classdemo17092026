@@ -59,9 +59,9 @@ function App() {
   return (
     <div className="app-shell">
       <header className="site-header">
-        <button className="brand" type="button" onClick={restart} aria-label="Volver al inicio de Nexo">
+        <button className="brand" type="button" onClick={restart} aria-label="Volver al inicio de Nemo IA">
           <span className="brand__mark"><GeometricMark shape="hexagon" accent="currentColor" size="small" /></span>
-          <span className="brand__name">Nexo</span>
+          <span className="brand__name">Nemo IA</span>
         </button>
       </header>
 

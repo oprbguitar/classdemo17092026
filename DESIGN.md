@@ -1,11 +1,11 @@
-# Nexo — dirección de producto y diseño
+# Nemo IA — dirección de producto y diseño
 
 ## Dirección
 
 - **Modo:** operate, con un flujo de aprendizaje práctico que debe poder recorrerse rápidamente.
 - **Usuario principal:** persona adulta que necesita resolver una tarea de trabajo y todavía no conoce bien la IA.
 - **Tarea principal:** elegir una intención, responder una pregunta sencilla y llegar a una instrucción que pueda probar.
-- **Dirección visual:** tablero de estado por zonas con grafito, superficie clara y naranja señal; el rail de fases guía el avance, el canvas concentra el trabajo y el inspector lateral contextualiza proveedor y perfil.
+- **Dirección visual:** rail lateral + workspace amplio con pizarra, superficie clara y acento cian; el rail de fases guía el avance, el canvas concentra el trabajo y el inspector lateral organiza proveedor, modelo, precio y formación.
 - **Tipografía:** IBM Plex Serif para títulos, IBM Plex Sans para lectura y controles, y IBM Plex Mono para instrucciones copiables y metadatos.
 - **Motion:** seco, 120–160 ms, reservado a selección, foco y feedback; se desactiva con `prefers-reduced-motion`.
 
@@ -32,7 +32,7 @@ Los tokens viven en `src/styles/tokens.css` y son la única fuente de color, tip
 
 ## Responsive y accesibilidad
 
-La cuadrícula inicial es 3 × 2 en escritorio y 2 × 3 en móvil. La lección pasa a tres zonas compactas en escritorio y se apila en móvil: rail de fases, canvas y proveedores. En escritorio el workspace ocupa una sola vista y cada zona puede desplazarse de forma independiente cuando el prompt o el inspector supera la altura disponible; en móvil el contenido fluye verticalmente para conservar legibilidad. El contenido tiene un máximo de 1180 px y no usa scroll horizontal. Se verifican 360, 768, 1280 y 1600 px. Todos los controles son botones semánticos de al menos 44 px, con focus-visible visible y estados nombrados además del color.
+La cuadrícula inicial es 3 × 2 en escritorio y 2 × 3 en móvil. La lección pasa a tres zonas compactas en escritorio y se apila en móvil: rail de fases, canvas y proveedores. En escritorio el workspace usa hasta 1440 px y cada zona puede desplazarse de forma independiente cuando el prompt o el inspector supera la altura disponible; en móvil el contenido fluye verticalmente para conservar legibilidad. El inspector concentra proveedores, recomendación de modelo, precio y rutas de formación sin reservar espacios decorativos. Se verifican 360, 768, 1280 y 1600 px. Todos los controles son botones semánticos de al menos 44 px, con focus-visible visible y estados nombrados además del color.
 
 ## Anti-patrones evitados
 

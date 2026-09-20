@@ -27,7 +27,20 @@ Ahora mejora el resultado con criterios definidos:
 
 Devuelve primero la versión mejorada y después una breve lista de cambios y comprobaciones pendientes.`
 
-const systemInstruction = (title: string) => `Diseña un sistema reutilizable para: ${title}.
+const systemInstruction = (title: string) => {
+  const isBuildTask = /automatizar|herramienta|flujo|sistema|software/i.test(title)
+  const buildGuidance = isBuildTask ? `
+
+Si vas a convertirlo en software o automatización, usa Codex o Claude Code como agente de implementación y trabaja por entregas revisables:
+- Primero inspecciona el repositorio o el proceso actual y devuelve un mapa de archivos, datos, permisos y dependencias. No cambies nada todavía.
+- Después propone una arquitectura pequeña, criterios de aceptación y una lista de pruebas. Pide confirmación antes de tocar datos, credenciales o producción.
+- Implementa por verticales: interfaz, lógica, persistencia e integración. Mantén un registro de errores, reintentos, auditoría y una bandeja de excepciones.
+- Ejecuta lint, pruebas unitarias, integración y una prueba de extremo a extremo. Muestra el diff, los comandos ejecutados y cualquier limitación.
+- Documenta instalación, variables de entorno, recuperación, responsables y cómo desactivar el flujo.
+
+Para tareas repetitivas compara antes de programar: Zapier si necesitas conectar muchas aplicaciones sin código; Make si necesitas rutas visuales y condiciones; n8n si necesitas control técnico o autoalojamiento; Claude Cowork u otro espacio de trabajo solo si está disponible en tu cuenta y con sus permisos revisados.` : ''
+
+  return `Diseña un sistema reutilizable para: ${title}.
 
 Especifica con detalle:
 1. Objetivo, alcance y resultado esperado.
@@ -37,9 +50,10 @@ Especifica con detalle:
 5. Casos excepcionales y una bandeja de pendientes que no pueda resolver la IA.
 6. Revisión humana obligatoria, responsable y momento de aprobación.
 7. Salida final, nombre de los archivos o campos, y dónde guardar la evidencia.
-8. Prueba piloto con tres casos conocidos, indicadores de error y plan de mejora.
+8. Prueba piloto con tres casos conocidos, indicadores de error y plan de mejora.${buildGuidance}
 
 No conectes herramientas ni automatices una decisión hasta validar el flujo con una persona responsable.`
+}
 
 type LessonDraft = Omit<LearningCard, 'contexts' | 'verification' | 'accessLevel' | 'phases'> & Partial<Pick<LearningCard, 'contexts' | 'verification' | 'accessLevel'>>
 
@@ -105,7 +119,7 @@ const entenderDocumento = lesson({
   example: 'Tengo una norma de 40 páginas y quiero conocer cuáles son sus principales obligaciones.',
   steps: ['Adjunta el documento.', 'Explica qué quieres conocer.', 'Pide que indique de dónde obtiene cada respuesta.', 'Comprueba la información en el documento original.'],
   instruction: 'Analiza este documento y explícame sus principales obligaciones. Indica la página o sección de donde obtienes cada conclusión. Si no encuentras la respuesta, dilo con claridad.',
-  tools: getTools('chatgpt', 'claude', 'gemini', 'copilot'),
+  tools: getTools('chatgpt', 'claude', 'gemini', 'copilot', 'notebooklm'),
   caution: 'La IA puede interpretar mal un documento o completar un vacío con una suposición. Comprueba siempre lo importante en la fuente original.',
   responsible: 'No compartas información sensible sin autorización. Si el documento contiene datos personales, usa una copia desidentificada cuando sea posible.',
   further: 'En el siguiente paso puedes definir un formato fijo de respuesta, exigir una tabla de evidencias o comparar el documento con una versión anterior.',
@@ -124,7 +138,7 @@ const mejorarTexto = lesson({
   example: 'Tengo un correo largo para explicar un cambio de procedimiento y quiero que se entienda en una sola lectura.',
   steps: ['Pega el texto y explica quién lo leerá.', 'Indica qué debe conservarse.', 'Pide una versión mejorada y una breve lista de cambios.', 'Revisa que la versión final mantenga tu intención.'],
   instruction: 'Mejora la claridad de este texto para [audiencia]. Conserva todos los datos, fechas y compromisos. No inventes información. Devuélveme primero la versión revisada y luego tres cambios importantes que hayas hecho.',
-  tools: getTools('chatgpt', 'claude', 'copilot'),
+  tools: getTools('chatgpt', 'claude', 'copilot', 'jenni-ai'),
   recommendation: { title: 'Sugerencia para oficina', body: 'Si trabajas en Word o Excel, prueba Microsoft Copilot: está integrado en Microsoft 365 y puede ayudarte a reescribir, ampliar o mejorar textos dentro del flujo de trabajo.', toolId: 'copilot' },
   caution: 'Una redacción más fluida puede ocultar un cambio de sentido. Compara la versión revisada con tu borrador antes de enviarla.',
   responsible: 'Retira nombres, teléfonos y datos internos si no tienes autorización para compartirlos.',
@@ -146,7 +160,7 @@ const investigarFuentes = lesson({
   example: 'Necesito entender qué cambios recientes afectan a un procedimiento y quiero comparar fuentes oficiales.',
   steps: ['Formula la pregunta y el país o periodo.', 'Pide fuentes primarias y separa las secundarias.', 'Abre cada enlace y comprueba la fecha.', 'Organiza los hallazgos y las dudas que quedan abiertas.'],
   instruction: 'Investiga este tema para el contexto de [país/organización] y el periodo [fechas]. Prioriza fuentes primarias. Para cada hallazgo, indica el enlace, la fecha y qué parte de la fuente lo respalda. Separa hechos comprobados de interpretaciones.',
-  tools: getTools('perplexity', 'chatgpt', 'gemini'),
+  tools: getTools('perplexity', 'chatgpt', 'gemini', 'notebooklm'),
   caution: 'Una respuesta con enlaces no garantiza que las fuentes digan lo que la respuesta afirma. Abre y lee cada fuente relevante.',
   responsible: 'No uses una búsqueda generada como única base para una decisión legal, médica o financiera.',
   further: 'Puedes diseñar una matriz de fuentes con criterios de autoridad, fecha, alcance y coincidencias entre documentos.',
@@ -200,7 +214,7 @@ const automatizarTarea = lesson({
   example: 'Cada semana recibo archivos con el mismo formato, debo extraer algunos campos y preparar un resumen para revisión.',
   steps: ['Describe el proceso actual y sus excepciones.', 'Separa decisiones humanas de pasos mecánicos.', 'Diseña una prueba con pocos archivos y una salida esperada.', 'Mide errores y agrega una revisión antes de usarlo en producción.'],
   instruction: 'Ayúdame a descomponer esta tarea repetitiva: [describe la tarea]. Identifica entradas, pasos, decisiones, excepciones y salida. Propón un flujo pequeño para probar, indica dónde debe intervenir una persona y define cómo verificar que el resultado sea correcto.',
-  tools: getTools('chatgpt', 'claude', 'gemini'),
+  tools: getTools('chatgpt', 'claude', 'gemini', 'zapier', 'make', 'n8n'),
   caution: 'Automatizar un proceso confuso solo hace que los errores se repitan más rápido. Prueba con casos conocidos y conserva una revisión humana.',
   responsible: 'Define quién puede acceder a la información y dónde se guardan los archivos antes de conectar herramientas.',
   accessLevel: 'advanced',
@@ -275,8 +289,8 @@ export const capabilities: Capability[] = [
     id: 'construir', label: 'CONSTRUIR', description: 'Convertir una tarea en un sistema.', shape: 'hexagon', accent: 'green', question: '¿Qué quieres construir?',
     children: [
       { id: 'automatizar-una-tarea', label: 'Automatizar una tarea repetitiva', description: 'Diseñar un flujo pequeño y verificable.', shape: 'flow', accent: 'green', lesson: automatizarTarea },
-      { id: 'crear-un-flujo', label: 'Crear un flujo de trabajo', description: 'Ordenar entradas, decisiones y salidas.', shape: 'flow', accent: 'teal', lesson: simpleLesson('crear-flujo', 'Crear un flujo de trabajo', 'Puedes dibujar un proceso y convertirlo en pasos que otra persona pueda entender, revisar y mejorar.', 'Describe este proceso como un flujo: [proceso]. Enumera entradas, decisiones, responsables, salidas y excepciones. Señala qué parte conviene probar primero.', ['chatgpt', 'claude']) },
-      { id: 'herramienta-interna', label: 'Construir una herramienta interna', description: 'Pasar de una necesidad a un prototipo.', shape: 'hexagon', accent: 'coral', lesson: simpleLesson('herramienta-interna', 'Construir una herramienta interna', 'Puedes convertir una necesidad repetida en una especificación de prototipo con usuarios, datos, acciones y límites.', 'Convierte esta necesidad en una especificación de herramienta interna: [necesidad]. Incluye usuarios, entradas, acciones, permisos, errores y una primera versión pequeña.', ['chatgpt', 'claude']) },
+      { id: 'crear-un-flujo', label: 'Crear un flujo de trabajo', description: 'Ordenar entradas, decisiones y salidas.', shape: 'flow', accent: 'teal', lesson: simpleLesson('crear-flujo', 'Crear un flujo de trabajo', 'Puedes dibujar un proceso y convertirlo en pasos que otra persona pueda entender, revisar y mejorar.', 'Describe este proceso como un flujo: [proceso]. Enumera entradas, decisiones, responsables, salidas y excepciones. Señala qué parte conviene probar primero.', ['chatgpt', 'claude', 'zapier', 'make', 'n8n']) },
+      { id: 'herramienta-interna', label: 'Construir una herramienta interna', description: 'Pasar de una necesidad a un prototipo.', shape: 'hexagon', accent: 'coral', lesson: simpleLesson('herramienta-interna', 'Construir una herramienta interna', 'Puedes convertir una necesidad repetida en una especificación de prototipo con usuarios, datos, acciones y límites.', 'Convierte esta necesidad en una especificación de herramienta interna: [necesidad]. Incluye usuarios, entradas, acciones, permisos, errores y una primera versión pequeña. Indica si conviene implementarla con OpenAI Codex o Claude Code y por qué.', ['codex', 'claude-code', 'chatgpt', 'claude']) },
     ],
   },
 ]

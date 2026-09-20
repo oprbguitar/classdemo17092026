@@ -9,6 +9,30 @@ export interface VerificationStatus {
   updatedAt: string
 }
 
+export interface ToolPricing {
+  summary: string
+  url: string
+  checkedAt: string
+}
+
+export interface ModelAdvice {
+  economy: string
+  fast: string
+  quality: string
+  note: string
+}
+
+export interface LearningResource {
+  id: string
+  title: string
+  provider: string
+  scope: 'Internacional' | 'Perú'
+  type: 'Curso' | 'Certificado' | 'Diplomado'
+  description: string
+  url: string
+  updatedAt: string
+}
+
 export interface Tool {
   id: string
   name: string
@@ -19,6 +43,8 @@ export interface Tool {
   limitations: string[]
   recommendedFor: string[]
   verification: VerificationStatus
+  pricing: ToolPricing
+  modelAdvice: ModelAdvice
 }
 
 export interface ProfessionalContext {

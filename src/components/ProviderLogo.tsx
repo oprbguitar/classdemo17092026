@@ -9,6 +9,9 @@ const providerAssets: Record<string, string> = {
   gemini: 'gemini.svg',
   copilot: 'copilot.svg',
   perplexity: 'perplexity.svg',
+  codex: 'openai.svg',
+  'claude-code': 'claude.svg',
+  notebooklm: 'gemini.svg',
 }
 
 export function ProviderLogo({ provider, size = 'small' }: ProviderLogoProps) {

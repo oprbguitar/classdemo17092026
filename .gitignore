@@ -3,4 +3,6 @@ dist/
 coverage/
 playwright-report/
 test-results/
+pizarra-ia-dev.log
+.pizarra-ia-dev.pid
 .DS_Store

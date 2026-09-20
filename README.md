@@ -28,6 +28,12 @@ npm install
 npm run dev
 ```
 
+### Inicio con un clic en Windows
+
+Haz doble clic en [`INICIAR-PIZARRA-IA.bat`](./INICIAR-PIZARRA-IA.bat). El lanzador instala dependencias si hacen falta, arranca el servidor local, espera a que responda y abre `http://127.0.0.1:5173/` en el navegador predeterminado.
+
+Para detener el servidor registrado, ejecuta [`DETENER-PIZARRA-IA.bat`](./DETENER-PIZARRA-IA.bat). Los mensajes del proceso quedan en `pizarra-ia-dev.log` y no se versionan.
+
 Para validar la versión de producción:
 
 ```bash

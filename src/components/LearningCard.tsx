@@ -10,9 +10,10 @@ import type { LearningCard as LearningCardData, PhaseId } from '../types/content
 interface LearningCardProps {
   lesson: LearningCardData
   onBack: () => void
+  onRestart: () => void
 }
 
-export function LearningCard({ lesson, onBack }: LearningCardProps) {
+export function LearningCard({ lesson, onBack, onRestart }: LearningCardProps) {
   const [contextId, setContextId] = useState('general')
   const [phaseId, setPhaseId] = useState<PhaseId>(lesson.phases[0]?.id ?? 'hacer')
   const [toolId, setToolId] = useState(lesson.tools[0]?.id ?? '')
@@ -43,12 +44,22 @@ export function LearningCard({ lesson, onBack }: LearningCardProps) {
   return (
     <article className="lesson" aria-labelledby="lesson-title">
       <header className="lesson__header">
-        <div>
+        <div className="lesson__header-copy">
           <span className="eyebrow">Lección práctica · canvas de fases</span>
           <h1 id="lesson-title">{lesson.title}</h1>
           <p className="lesson__summary">{lesson.summary}</p>
         </div>
-        <VerificationBadge verification={lesson.verification} />
+        <div className="lesson__header-side">
+          <div className="lesson__header-actions">
+            <VerificationBadge verification={lesson.verification} />
+            <button className="lesson__restart" type="button" onClick={onRestart}>Empezar de nuevo</button>
+          </div>
+          <div className="lesson__header-guide">
+            <p className="section-kicker">Orientación rápida</p>
+            <strong>Prueba · mejora · sistematiza</strong>
+            <span>{lesson.steps[0]}</span>
+          </div>
+        </div>
       </header>
 
       <div className="lesson__workspace">

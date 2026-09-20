@@ -66,14 +66,14 @@ function App() {
       </header>
 
       <main className="board" aria-live="polite">
-        {!isHome && <div className="board__topline">
+        {!isHome && !lesson && <div className="board__topline">
           <span>Ideas · preguntas · aprendizaje real</span>
           <button className="restart-button" type="button" onClick={restart}>Empezar de nuevo</button>
         </div>}
 
         {path.length > 0 && <ContextTrail path={path} onSelect={goToPath} />}
 
-        {lesson ? <LearningCard lesson={lesson} onBack={goBack} /> : <BoardQuestion question={currentStep.question} choices={currentStep.choices} onSelect={choose} isHome={isHome} />}
+        {lesson ? <LearningCard lesson={lesson} onBack={goBack} onRestart={restart} /> : <BoardQuestion question={currentStep.question} choices={currentStep.choices} onSelect={choose} isHome={isHome} />}
 
         {!lesson && <div className="board__footer">
           {!isHome && <button className="back-button" type="button" onClick={goBack}>← <span>Volver</span></button>}

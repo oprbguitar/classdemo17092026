@@ -32,4 +32,15 @@ test.describe('Nemo IA', () => {
     await page.getByRole('button', { name: 'Empezar de nuevo' }).click()
     await expect(page.getByRole('heading', { name: '¿Qué quieres hacer hoy?' })).toBeVisible()
   })
+
+  test('centra el workspace y mantiene la orientación lateral', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('button', { name: 'ENTENDER' }).click()
+    await page.getByRole('button', { name: 'Una norma' }).click()
+
+    await expect(page.getByText('Orientación rápida')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Empezar de nuevo' })).toBeVisible()
+    await expect(page.locator('.lesson__workspace')).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+  })
 })

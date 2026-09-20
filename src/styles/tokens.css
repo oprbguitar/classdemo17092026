@@ -48,5 +48,5 @@
   --dur: 220ms;
   --dur-fast: 150ms;
   --ease: cubic-bezier(.2, .8, .2, 1);
-  --content-max: 1440px;
+  --content-max: 1360px;
 }
